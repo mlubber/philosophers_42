@@ -9,16 +9,17 @@ OBJ_DIR				= ./build/objects/
 
 # Compiler and CFlags
 CC					= cc
-CFLAGS				= -g -Wall -Werror -Wextra -pthread -I#-g -fsanitize=address
+CFLAGS				= -g -Wall -Werror -Wextra -pthread -I
 RM					= rm -f
 
 # Source Files
 MAIN_DIR			=	$(SRC_DIR)main.c
 
 UTL_DIR				=	$(SRC_DIR)utils/utils.c \
-						$(SRC_DIR)utils/threads.c \
 						$(SRC_DIR)utils/init.c \
-						$(SRC_DIR)utils/death.c
+						$(SRC_DIR)utils/threads.c \
+						$(SRC_DIR)utils/forks.c \
+						$(SRC_DIR)utils/monitor.c
 
 # Concatenate all source files
 SRCS 				= $(MAIN_DIR) $(UTL_DIR)

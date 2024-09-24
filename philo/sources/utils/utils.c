@@ -6,40 +6,39 @@
 /*   By: mlubbers <mlubbers@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/09 09:11:55 by mlubbers      #+#    #+#                 */
-/*   Updated: 2024/09/10 13:32:57 by mlubbers      ########   odam.nl         */
+/*   Updated: 2024/09/24 06:43:59 by mlubbers      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/philosophers.h"
+#include "../include/philosophers.h"
 
-int	ft_strlen(const char *str)
+long	get_time_in_ms(void)
 {
-	int	i;
+	struct timeval	tv;
 
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
-		i++;
-	return (i);
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
-long	get_timestamp(void)
+void	ft_usleep(long int time_in_ms)
 {
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
-}
-
-void	ft_usleep(long time_in_ms)
-{
-	long	start_time;
+	long int	start_time;
 
 	start_time = 0;
-	start_time = get_timestamp();
-	while ((get_timestamp() - start_time) < time_in_ms)
+	start_time = get_time_in_ms();
+	while ((get_time_in_ms() - start_time) < time_in_ms)
 		usleep(100);
+}
+
+void	write_state(t_philo *philo, t_input *input, char *str)
+{
+	long	cur_time;
+
+	cur_time = get_time_in_ms() - input->start_time;
+	pthread_mutex_lock(&(input->print_lock));
+	if (!stop_sim(input))
+		printf("%09ld %d %s\n", cur_time, philo->id + 1, str);
+	pthread_mutex_unlock(&(input->print_lock));
 }
 
 long	ft_atoi(const char *str)
@@ -73,12 +72,16 @@ int	check_if_num(int argc, char **argv)
 {
 	int	i;
 	int	j;
+	int	strl;
 
 	i = 1;
 	while (i < argc)
 	{
+		strl = 0;
+		while (argv[i][strl] != '\0')
+			strl++;
 		j = 0;
-		while (j < ft_strlen(argv[i]))
+		while (j < strl)
 		{
 			if (!(argv[i][j] >= '0' && argv[i][j] <= '9'))
 				return (1);
@@ -88,4 +91,3 @@ int	check_if_num(int argc, char **argv)
 	}
 	return (0);
 }
-
