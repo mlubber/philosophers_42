@@ -6,7 +6,7 @@
 /*   By: mlubbers <mlubbers@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/09 09:11:55 by mlubbers      #+#    #+#                 */
-/*   Updated: 2024/09/24 06:43:59 by mlubbers      ########   odam.nl         */
+/*   Updated: 2024/09/24 14:13:14 by mlubbers      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ void	write_state(t_philo *philo, t_input *input, char *str)
 
 	cur_time = get_time_in_ms() - input->start_time;
 	pthread_mutex_lock(&(input->print_lock));
-	if (!stop_sim(input))
-		printf("%09ld %d %s\n", cur_time, philo->id + 1, str);
+	if (stop_sim(input) == false)
+		printf("%07ld %d %s\n", cur_time, philo->id + 1, str);
 	pthread_mutex_unlock(&(input->print_lock));
 }
 
